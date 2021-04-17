@@ -1,0 +1,9 @@
+.git
+.dockerignorge
+.env*
+.eslintignore
+.eslintrc.js
+.gitignore
+.prettierrc.json
+Dockerfile
+logs
