@@ -6,7 +6,7 @@ import { IUserInputDTO } from '../../interfaces/IUser'
 import AuthService from '../services/auth'
 
 const route = Router()
-const Logger : Logger = Container.get('logger')
+const logger: Logger = Container.get('logger')
 
 export default (app: Router) => {
   app.use('/auth', route)
@@ -21,11 +21,9 @@ export default (app: Router) => {
       })
     }),
     async (req: Request, res: Response, next: NextFunction) => {
-      const logger:Logger = Container.get('logger')
-
       try {
         const authService = Container.get(AuthService)
-        const { user, token } = await authService.signUp(req.body)
+        const { user, token } = await authService.signUp(req.body as IUserInputDTO)
         return res.status(201).json({ user, token })
       } catch (error) {
         logger.error('🔥 error: %o', error)
@@ -43,11 +41,11 @@ export default (app: Router) => {
       })
     }),
     async (req: Request, res: Response, next: NextFunction) => {
-      const logger:Logger = Container.get('logger')
-
       try {
         const authService = Container.get(AuthService)
+
         const { email, password } = req.body
+        logger.info(`User ${email} has login`)
         const { user, token } = await authService.signIn(email, password)
         return res.status(200).json({ user, token })
       } catch (error) {

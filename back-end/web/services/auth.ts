@@ -2,6 +2,7 @@ import { Service, Inject } from 'typedi'
 import argon2 from 'argon2'
 import { randomBytes } from 'crypto'
 import jwt from 'jsonwebtoken'
+import { Logger } from 'winston'
 import { IUser, IUserInputDTO } from '../../interfaces/IUser'
 import config from '../../config'
 
@@ -9,7 +10,7 @@ import config from '../../config'
 export default class AuthService {
   constructor(
     @Inject('UserModel') private userModel: Models.UserModel,
-    @Inject('logger') private logger
+    @Inject('logger') private logger: Logger
   ) { }
 
   public async signUp(userInput: IUserInputDTO): Promise<{ user: IUser, token: string }> {
@@ -79,7 +80,8 @@ export default class AuthService {
         name: user.name,
         exp: exp.getTime() / 1000
       },
-      config.jwtSecret
+      config.jwtSecret,
+      { algorithm: config.jwtAlgorithm }
     )
   }
 }

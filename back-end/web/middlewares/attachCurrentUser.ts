@@ -1,13 +1,11 @@
 import { Container } from 'typedi'
-import mongoose from 'mongoose'
-import { IUser } from '../../interfaces/IUser';
 import { Logger } from 'winston'
 
 const attachCurrentUser = async (req, res, next) => {
-  const Logger : Logger = Container.get('logger')
+  const Logger: Logger = Container.get('logger')
 
   try {
-    const userModel = Container.get('userModel') as mongoose.Model<IUser & mongoose.Document>
+    const userModel: Models.UserModel = Container.get('UserModel')
     const userRecord = await userModel.findById(req.token._id)
     if (!userRecord) {
       return res.sendStatus(401)
